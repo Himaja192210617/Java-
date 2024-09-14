@@ -1,0 +1,105 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+public class BMICalculator extends JFrame implements ActionListener {
+private JLabel heightLabel, weightLabel, resultLabel;
+private JTextField heightField, weightField;
+private JButton calculateButton;
+public BMICalculator() {
+setTitle("BMI Calculator");
+setSize(300, 200);
+setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+heightLabel = new JLabel("Height (m):");
+weightLabel = new JLabel("Weight (kg):");
+resultLabel = new JLabel("");
+heightField = new JTextField(10);
+weightField = new JTextField(10);
+calculateButton = new JButton("Calculate BMI");
+calculateButton.addActionListener(this);
+JPanel panel = new JPanel();
+panel.setLayout(new GridLayout(3, 2));
+panel.add(heightLabel);
+panel.add(heightField);
+panel.add(weightLabel);
+panel.add(weightField);
+panel.add(calculateButton);
+panel.add(resultLabel);
+add(panel);
+setVisible(true);
+}
+@Override
+public void actionPerformed(ActionEvent e) {
+if (e.getSource() == calculateButton) {
+try {
+double height = Double.parseDouble(heightField.getText());11
+double weight = Double.parseDouble(weightField.getText());
+// Calculate BMI
+double bmi = calculateBMI(height, weight);
+// Display result
+String interpretation = interpretBMI(bmi);
+resultLabel.setText("Your BMI is: " + String.format("%.2f", bmi) + " - " +
+interpretation);
+} catch (NumberFormatException ex) {
+JOptionPane.showMessageDialog(this, "Please enter valid numbers for height and
+weight.");
+}
+}
+}
+private double calculateBMI(double height, double weight) {
+return weight / (height * height);
+}
+private String interpretBMI(double bmi) {
+if (bmi < 18.5) {
+return "You are underweight.";
+} else if (bmi >= 18.5 && bmi < 25) {
+return "You are normal weight.";
+} else if (bmi >= 25 && bmi < 30) {
+return "You are overweight.";
+} else {
+return "You are obese.";
+}
+}
+public static void main(String[] args) {
+new LoginFrame();
+}
+}
+class LoginFrame extends JFrame implements ActionListener {
+private JLabel userLabel, passLabel;
+private JTextField userField;
+private JPasswordField passField;
+private JButton loginButton;
+public LoginFrame() {
+setTitle("Login");
+setSize(300, 150);
+setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+userLabel = new JLabel("Username:");
+passLabel = new JLabel("Password:");
+userField = new JTextField(10);12
+passField = new JPasswordField(10);
+loginButton = new JButton("Login");
+loginButton.addActionListener(this);
+JPanel panel = new JPanel();
+panel.setLayout(new GridLayout(3, 2));
+panel.add(userLabel);
+panel.add(userField);
+panel.add(passLabel);
+panel.add(passField);
+panel.add(loginButton);
+add(panel);
+setVisible(true);
+}
+@Override
+public void actionPerformed(ActionEvent e) {
+String username = userField.getText();
+String password = new String(passField.getPassword());
+// Validate username and password
+if (username.equals("admin") && password.equals("password")) {
+JOptionPane.showMessageDialog(this, "Login successful!");
+this.dispose(); // Close the login window
+new BMICalculator(); // Open the BMI calculator window
+} else {
+JOptionPane.showMessageDialog(this, "Invalid username or password. Try again.");
+}
+}
+}
